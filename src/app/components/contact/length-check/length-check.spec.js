@@ -1,12 +1,14 @@
-describe('Contact', function () {
-  beforeEach(module('components.contact'));
+import contactModule from '../../contact';
 
-  describe('lengthCheck', function () {
+describe('Contact', () => {
+  beforeEach(window.module(contactModule));
+
+  describe('lengthCheck', () => {
     var $rootScope,
       $compile,
       element;
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $rootScope = $injector.get('$rootScope');
       $compile = $injector.get('$compile');
 
@@ -16,12 +18,12 @@ describe('Contact', function () {
       $rootScope.$digest();
     }));
 
-    it('should contain dynamic-input class', function() {
+    it('should contain dynamic-input class', () => {
       expect(element.hasClass('dynamic-input')).toEqual(true);
     });
 
-    it('should dynamically add dynamic-input--no-contents class', function() {
-      var scope = element.scope();
+    it('should dynamically add dynamic-input--no-contents class', () => {
+      const scope = element.scope();
 
       element.val('John Doe').triggerHandler('input');
       scope.$apply();

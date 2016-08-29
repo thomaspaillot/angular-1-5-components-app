@@ -1,51 +1,50 @@
-describe('Auth', function () {
-  beforeEach(module('components.auth'));
+import authModule from '../../auth';
 
-  beforeEach(module(function ($stateProvider) {
+describe('Auth', () => {
+  beforeEach(window.module(authModule));
+
+  beforeEach(window.module($stateProvider => {
     $stateProvider.state('app', { url: '/' });
   }));
 
-  describe('Routes', function () {
-    var $state, $location, $rootScope, AuthService;
+  describe('Routes', () => {
+    let $q, $state, $location, $rootScope, AuthService;
 
     function goTo(url) {
       $location.url(url);
       $rootScope.$digest();
     }
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
+      $q = $injector.get('$q');
       $state = $injector.get('$state');
       $location = $injector.get('$location');
       $rootScope = $injector.get('$rootScope');
       AuthService = $injector.get('AuthService');
     }));
 
-    it('should go to auth.register state', function() {
-      spyOn(AuthService, 'requireAuthentication').and.callFake(
-        function () {
-          return $q.when('is authenticated');
-        }
-      );
+    it('should go to auth.register state', () => {
+      spyOn(AuthService, 'requireAuthentication').and.callFake(() => $q.when('is authenticated'));
       goTo('/auth/register');
-      expect($state.current.name).toEqual('auth.register')
+      expect($state.current.name).toEqual('auth.register');
     });
 
-    it('should redirect to app state', function() {
+    it('should redirect to app state', () => {
       spyOn(AuthService, 'isAuthenticated').and.returnValue(true);
       goTo('/auth/register');
-      expect($state.current.name).toEqual('app')
+      expect($state.current.name).toEqual('app');
     });
   });
 
-  describe('RegisterController', function () {
-    var $componentController,
+  describe('RegisterController', () => {
+    let $componentController,
       controller,
       AuthService,
       $state,
       $rootScope,
       $q;
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $componentController = $injector.get('$componentController');
       AuthService = $injector.get('AuthService');
       $state = $injector.get('$state');
@@ -57,7 +56,7 @@ describe('Auth', function () {
       );
     }));
 
-    it('should initialize with correct properties', function () {
+    it('should initialize with correct properties', () => {
       controller.$onInit();
 
       expect(controller.error).toBeNull();
@@ -65,19 +64,17 @@ describe('Auth', function () {
       expect(controller.user.password).toEqual('');
     });
 
-    it('should redirect on successful registration ', function () {
-      var mockUser = { email: 'test@test.com', password: 'insecure' },
+    it('should redirect on successful registration ', () => {
+      const mockUser = { email: 'test@test.com', password: 'insecure' },
         mockEvent = { $event: { user: mockUser } };
 
-      spyOn(AuthService, 'register').and.callFake(function() {
-        return $q.when({$id: 1});
-      });
+      spyOn(AuthService, 'register').and.callFake(() => $q.when({$id: 1}));
 
       spyOn($state, 'go');
 
-      var promise = controller.createUser(mockEvent);
+      const promise = controller.createUser(mockEvent);
 
-      promise.then(function(result){
+      promise.then(() => {
         expect(AuthService.register).toHaveBeenCalledWith(mockEvent.user);
         expect($state.go).toHaveBeenCalledWith('app');
       });
@@ -85,20 +82,18 @@ describe('Auth', function () {
       $rootScope.$digest();
     });
 
-    it('should set error on failed login ', function () {
-      var mockUser = { email: 'test@test.com', password: 'insecure' },
+    it('should set error on failed login ', () => {
+      let mockUser = { email: 'test@test.com', password: 'insecure' },
         mockEvent = { $event: { user: mockUser } },
         mockMessage = 'Oh bollocks!';
 
-      spyOn(AuthService, 'register').and.callFake(function() {
-        return $q.reject({ message: mockMessage});
-      });
+      spyOn(AuthService, 'register').and.callFake(() => $q.reject({ message: mockMessage}));
 
       spyOn($state, 'go');
 
-      var promise = controller.createUser({});
+      const promise = controller.createUser({});
 
-      promise.then(function(result){
+      promise.then(() => {
         expect(AuthService.register).toHaveBeenCalledWith(mockEvent.user);
         expect(controller.error).toEqual(mockMessage);
         expect($state.go).not.toHaveBeenCalled();

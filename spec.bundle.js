@@ -1,5 +1,6 @@
 import angular from 'angular';
 import mocks from 'angular-mocks';
+import firebaseMocks from './mocks/firebase.mock';
 
 // We use the context method on `require` which Webpack created
 // in order to signify which files we actually want to require or import.

@@ -1,28 +1,31 @@
-describe('Contact', function () {
-  beforeEach(module('components.auth'));
+import authModule from '../../auth';
+import contactModule from '../../contact';
 
-  beforeEach(module('components.contact', function ($provide) {
+describe('Contact', () => {
+  beforeEach(window.module(authModule));
+
+  beforeEach(window.module(contactModule, $provide => {
     $provide.value('ContactService', {
       updateContact: angular.noop,
       deleteContact: angular.noop,
       getContactById: function() {
         return {
           $loaded: angular.noop
-        }
+        };
       }
     });
 
     $provide.value('cfpLoadingBar', {
       start: angular.noop,
       complete: angular.noop
-    })
+    });
 
     $provide.value('$window', {
       confirm: function() { return true; }
-    })
+    });
   }));
 
-  beforeEach(module(function ($stateProvider) {
+  beforeEach(window.module($stateProvider => {
     $stateProvider.state('app', {
       redirectTo: 'contacts',
       url: '/app',
@@ -32,22 +35,22 @@ describe('Contact', function () {
     });
   }));
 
-  describe('Routes', function () {
-    var $state, $location, $rootScope, AuthService;
+  describe('Routes', () => {
+    let $state, $location, $rootScope, AuthService;
 
     function goTo(url) {
       $location.url(url);
       $rootScope.$digest();
     }
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $state = $injector.get('$state');
       $location = $injector.get('$location');
       $rootScope = $injector.get('$rootScope');
       AuthService = $injector.get('AuthService');
     }));
 
-    it('should go to the contact state', function() {
+    it('should go to the contact state', () => {
       spyOn(AuthService, 'isAuthenticated').and.returnValue(true);
 
       goTo('/app/contact/1');
@@ -56,8 +59,8 @@ describe('Contact', function () {
     });
   });
 
-  describe('ContactDetailController', function () {
-    var $componentController,
+  describe('ContactDetailController', () => {
+    let $componentController,
       controller,
       $state,
       ContactService,
@@ -66,12 +69,12 @@ describe('Contact', function () {
       $q,
       mockContact = { $id: 1 };
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $componentController = $injector.get('$componentController');
       $state = $injector.get('$state');
       ContactService = $injector.get('ContactService');
       cfpLoadingBar = $injector.get('cfpLoadingBar');
-      $window = $injector.get('$window');
+      //$window = $injector.get('$window');
       $rootScope = $injector.get('$rootScope');
       $q = $injector.get('$q');
 
@@ -81,21 +84,17 @@ describe('Contact', function () {
       );
     }));
 
-    it('should update contact', function () {
-      var event = { contact: { $id: 1 }};
+    it('should update contact', () => {
+      const event = { contact: { $id: 1 }};
       spyOn(cfpLoadingBar, 'start');
       spyOn(cfpLoadingBar, 'complete');
-      spyOn(ContactService, 'updateContact').and.callFake(
-        function () {
-          return $q.when({})
-        }
-      );
+      spyOn(ContactService, 'updateContact').and.callFake(() => $q.when({}));
 
-      var promise = controller.updateContact(event);
+      const promise = controller.updateContact(event);
 
       expect(cfpLoadingBar.start).toHaveBeenCalled();
 
-      promise.then(function () {
+      promise.then(() => {
         expect(ContactService.updateContact).toHaveBeenCalled();
         expect(cfpLoadingBar.complete).toHaveBeenCalled();
       });
@@ -103,21 +102,15 @@ describe('Contact', function () {
       $rootScope.$digest();
     });
 
-    it('should delete contact', function () {
-      var event = { contact: { $id: 1, name: 'John Smith' }};
+    it('should delete contact', () => {
+      const event = { contact: { $id: 1, name: 'John Smith' }};
       spyOn($state, 'go');
 
-      spyOn(ContactService, 'deleteContact').and.callFake(
-        function () {
-          return $q.when({})
-        }
-      );
+      spyOn(ContactService, 'deleteContact').and.callFake(() =>$q.when({}));
 
-      var promise = controller.deleteContact(event);
+      const promise = controller.deleteContact(event);
 
-      promise.then(function () {
-        expect($state.go).toHaveBeenCalledWith('contacts');
-      });
+      promise.then(() => expect($state.go).toHaveBeenCalledWith('contacts'));
 
       $rootScope.$digest();
     });

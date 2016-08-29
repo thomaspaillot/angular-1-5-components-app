@@ -1,20 +1,22 @@
-describe('App', function () {
-  beforeEach(module('ui.router'));
+import uiRouter from 'angular-ui-router';
 
-  beforeEach(module('common', function ($provide) {
+describe('App', () => {
+  beforeEach(window.module(uiRouter));
+
+  beforeEach(window.module('common', function ($provide) {
     $provide.value('AuthService', {
       getUser: angular.noop,
       logout: angular.noop
     });
   }));
 
-  beforeEach(module('components.auth'));
+  beforeEach(window.module('components.auth'));
 
-  beforeEach(module(function ($stateProvider) {
+  beforeEach(window.module($stateProvider => {
     $stateProvider.state('contacts', { url: 'app/contacts' });
   }));
 
-  describe('Routes', function () {
+  describe('Routes', () => {
     var $state, $location, $rootScope, AuthService;
 
     function goTo(url) {
@@ -22,14 +24,14 @@ describe('App', function () {
       $rootScope.$digest();
     }
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $state = $injector.get('$state');
       $location = $injector.get('$location');
       $rootScope = $injector.get('$rootScope');
       AuthService = $injector.get('AuthService');
     }));
 
-    it('should redirect to contacts state', function () {
+    it('should redirect to contacts state', () => {
       spyOn(AuthService, 'isAuthenticated').and.returnValue(true);
 
       goTo('/app');
@@ -38,10 +40,10 @@ describe('App', function () {
     });
   });
 
-  describe('AppController', function () {
-    var $rootScope, $q, $componentController, controller, AuthService, $state;
+  describe('AppController', () => {
+    let $rootScope, $q, $componentController, controller, AuthService, $state;
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $rootScope = $injector.get('$rootScope');
       $q = $injector.get('$q');
       $componentController = $injector.get('$componentController');
@@ -49,8 +51,8 @@ describe('App', function () {
       $state = $injector.get('$state');
     }));
 
-    it('should get user on instantiated', function () {
-      var user = { $id: 1 }
+    it('should get user on instantiated', () => {
+      const user = { $id: 1 };
       spyOn(AuthService, 'getUser').and.returnValue(user);
 
       controller = $componentController('app',
@@ -61,10 +63,9 @@ describe('App', function () {
       expect(controller.user).toEqual(user);
     });
 
-    it('should go to the login state on logout', function () {
-      spyOn(AuthService, 'logout')
-        .and.callFake(function () {
-        var deferred = $q.defer();
+    it('should go to the login state on logout', () => {
+      spyOn(AuthService, 'logout').and.callFake(() => {
+        const deferred = $q.defer();
         deferred.resolve();
         return deferred.promise;
       });

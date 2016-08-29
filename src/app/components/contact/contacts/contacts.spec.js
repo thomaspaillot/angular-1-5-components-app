@@ -1,17 +1,20 @@
-describe('Contact', function () {
-  beforeEach(module('components.contact', function($provide){
+import authModule from '../../auth';
+import contactModule from '../../contact';
+
+describe('Contact', () => {
+  beforeEach(window.module(contactModule, $provide => {
     $provide.value('ContactService', {
       getContactList: function() {
         return {
           $loaded: angular.noop
-        }
+        };
       }
     });
   }));
 
-  beforeEach(module('components.auth'));
+  beforeEach(window.module(authModule));
 
-  beforeEach(module(function ($stateProvider) {
+  beforeEach(window.module($stateProvider => {
     $stateProvider.state('app', {
       redirectTo: 'contacts',
       url: '/app',
@@ -21,32 +24,32 @@ describe('Contact', function () {
     });
   }));
 
-  describe('Routes', function () {
-    var $state, $location, $rootScope, AuthService;
+  describe('Routes', () => {
+    let $state, $location, $rootScope, AuthService;
 
     function goTo(url) {
       $location.url(url);
       $rootScope.$digest();
     }
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $state = $injector.get('$state');
       $location = $injector.get('$location');
       $rootScope = $injector.get('$rootScope');
       AuthService = $injector.get('AuthService');
     }));
 
-    it('should go to the contact state', function() {
+    it('should go to the contact state', () => {
       spyOn(AuthService, 'isAuthenticated').and.returnValue(true);
 
       goTo('/app/contacts?friends');
 
-      expect($state.current.name).toEqual('contacts')
+      expect($state.current.name).toEqual('contacts');
     });
   });
 
-  describe('ContactController', function () {
-    var $componentController,
+  describe('ContactController', () => {
+    let $componentController,
       controller,
       $filter,
       $state,
@@ -62,7 +65,7 @@ describe('Contact', function () {
         }
       ];
 
-    beforeEach(inject(function ($injector) {
+    beforeEach(inject($injector => {
       $componentController = $injector.get('$componentController');
       $filter = $injector.get('$filter');
       $state = $injector.get('$state');
@@ -72,15 +75,15 @@ describe('Contact', function () {
       );
     }));
 
-    it('should filter contacts', function() {
+    it('should filter contacts',() => {
       expect(controller.filteredContacts).toEqual([{
         name: 'John Doe',
         tag: 'friends'
       }]);
     });
 
-    it('should route on goToContact call', function () {
-      var event = { contactId: 1 };
+    it('should route on goToContact call', () => {
+      const event = { contactId: 1 };
 
       spyOn($state, 'go');
       controller.goToContact(event);

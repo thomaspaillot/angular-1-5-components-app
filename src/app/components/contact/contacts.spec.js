@@ -1,76 +1,75 @@
-describe('Contact', function () {
-  beforeEach(module('components.auth', function($provide){
+import authModule from '../auth';
+import contactModule from '../contact';
+import firebaseMock from '../../../../mocks/firebase.mock';
+
+describe('Contact', () => {
+  beforeEach(window.module(authModule, $provide => {
     $provide.value('AuthService', {
       getUser: function() {
-        return { uid: 1 }
+        return { uid: 1 };
       },
       isAuthenticated: function() {
         return true;
       }
     });
 
-    var child = function(record) {
-      return { child: child }
+    $provide.service('firebase', firebaseMock);
+
+    let child = function() {
+      return { child: child };
     };
 
     $provide.value('$firebaseRef', {
       contacts: {
         child: child
       }
-    })
+    });
   }));
 
-  beforeEach(module(function ($stateProvider) {
+  beforeEach(window.module($stateProvider => {
     $stateProvider.state('app', { url: '/' });
   }));
 
-  beforeEach(module('components.contact'));
+  beforeEach(window.module(contactModule));
 
-  describe('ContactService', function () {
-    var ContactService,
-      $rootScope;
+  describe('ContactService', () => {
+    var ContactService, $rootScope;
 
     beforeEach(inject(function ($injector) {
       ContactService = $injector.get('ContactService');
       $rootScope = $injector.get('$rootScope');
     }));
 
-    it('should get contacts', function () {
+    it('should get contacts', () => {
       // Pending
     });
 
-    it('should get a contact', function () {
-      var id = 1,
+    it('should get a contact', () => {
+      const id = 1,
         promise = ContactService.getContactById(id);
 
-      promise.then(function(ref){
-        expect(ref.key).toEqual(id);
-      });
-
+      promise.then(ref => expect(ref.key).toEqual(id));
       $rootScope.$digest();
     });
 
-    it('should create a contact', function () {
-      var contact = { email: 'test@test.com', password: 'insecure' }
+    it('should create a contact', () => {
+      const contact = { email: 'test@test.com', password: 'insecure' },
         promise = ContactService.createNewContact(contact);
 
-      promise.then(function(ref){
-        expect(ref.key).toEqual(1);
-      });
-
+      promise.then(ref => expect(ref.key).toEqual(1));
       $rootScope.$digest();
     });
 
-    it('should update a contact', function () {
-      var contact = { $save: angular.noop };
+    it('should update a contact', () => {
+      const contact = { $save: angular.noop };
 
       spyOn(contact, '$save');
       ContactService.updateContact(contact);
       expect(contact.$save).toHaveBeenCalled();
     });
 
-    it('should delete a contact', function () {
-      var contact = { $remove: angular.noop };
+    it('should delete a contact', () => {
+      const contact = { $remove: angular.noop };
 
       spyOn(contact, '$remove');
       ContactService.deleteContact(contact);

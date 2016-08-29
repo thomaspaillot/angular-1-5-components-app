@@ -1,0 +1,46 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "indent": [
+      2,
+      2
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    "semi": [
+      2,
+      "always"
+    ]
+  },
+  "globals": {
+    "angular": true,
+    "require": true,
+    "module": true,
+    "it": true,
+    "describe": true,
+    "xit": true,
+    "xdescribe": true,
+    "expect": true,
+    "beforeEach": true,
+    "inject": true,
+    "spyOn": true,
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": "eslint:recommended",
+  "ecmaFeatures": {
+    "modules": true
+  }
+}
