@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import htmlmin from 'gulp-htmlmin';
-import sass from 'gulp-sass';
 import templateCache from 'gulp-angular-templatecache';
 import server from 'browser-sync';
 import del from 'del';
@@ -45,12 +44,6 @@ gulp.task('templates', () => {
       }
     }))
     .pipe(gulp.dest('./'));
-});
-
-gulp.task('styles', () => {
-  return gulp.src(paths.styles)
-    .pipe(sass({outputStyle: 'compressed'}))
-    .pipe(gulp.dest(paths.dist + 'css/'));
 });
 
 gulp.task('copy', ['clean'], () => {
