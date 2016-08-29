@@ -12,33 +12,43 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/angular/angular.js',
-      'node_modules/angular-ui-router/release/angular-ui-router.js',
-      'node_modules/angular-loading-bar/build/loading-bar.min.js',
-      // 'node_modules/firebase/firebase.js',
-      // 'node_modules/angularfire/dist/angularfire.js',
-      'node_modules/angular-mocks/angular-mocks.js',
-      'mocks/firebase.mock.js',
-      'src/app/**/*.spec.js',
-      'dist/js/bundle.js',
+      {pattern: 'spec.bundle.js', watched: false}
     ],
 
     // list of files to exclude
-    exclude: [
-    ],
+    exclude: [],
 
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-phantomjs-launcher'),
-      require('karma-spec-reporter')
+      require('karma-spec-reporter'),
+      require('karma-sourcemap-loader'),
+      require('karma-webpack')
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+       'spec.bundle.js': ['webpack', 'sourcemap']
     },
 
+    webpack: {
+      devtool: 'inline-source-map',
+      module: {
+        loaders: [
+          {test: /\.js/, exclude: [/node_modules/], loader: 'babel'},
+          {test: /\.html/, loader: 'raw'},
+          {test: /\.scss$/, loader: 'style!css!sass'},
+          {test: /\.css$/, loader: 'style!css'},
+          {test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'file-loader'}
+        ]
+      }
+    },
+
+    webpackServer: {
+      noInfo: true
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
