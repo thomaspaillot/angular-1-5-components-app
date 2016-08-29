@@ -16,9 +16,7 @@ const exec = child.exec;
 const root = 'src';
 const paths = {
   dist: './dist/',
-  scripts: [`${root}/app/**/*.js`, `!${root}/app/**/*.spec.js`],
   tests: `${root}/app/**/*.spec.js`,
-  styles: `${root}/sass/*.scss`,
   templates: `${root}/app/**/*.html`,
   static: [
     `${root}/index.html`,
@@ -51,7 +49,7 @@ gulp.task('copy', ['clean'], () => {
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('firebase', ['styles', 'scripts'], cb => {
+gulp.task('firebase', ['webpack'], cb => {
   return exec('firebase deploy', function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
@@ -60,7 +58,7 @@ gulp.task('firebase', ['styles', 'scripts'], cb => {
 });
 
 gulp.task('webpack', ['clean'], (cb) => {
-  const config = require('./webpack.dist.config');
+  let config = require('./webpack.dist.config.babel').default;
   config.entry.app = paths.entry;
 
   webpack(config, (err, stats) => {
@@ -79,10 +77,9 @@ gulp.task('webpack', ['clean'], (cb) => {
 });
 
 gulp.task('serve', () => {
-  const config = require('./webpack.dev.config');
+  let config = require('./webpack.dev.config.babel').default;
   config.entry.app = ['webpack-hot-middleware/client?reload=true'].concat(paths.entry);
-
-  var compiler = webpack(config);
+  let compiler = webpack(config);
 
   server({
     port: process.env.PORT || 4000,
