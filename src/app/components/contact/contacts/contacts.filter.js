@@ -1,4 +1,4 @@
-function contactsFilter() {
+const contactsFilter = () => {
   return function (collection, params) {
     return collection.filter(function (item) {
       return item.tag === (
@@ -6,8 +6,6 @@ function contactsFilter() {
       );
     });
   };
-}
+};
 
-angular
-  .module('components.contact')
-  .filter('contactsFilter', contactsFilter);
+export default contactsFilter;

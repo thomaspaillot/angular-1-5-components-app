@@ -1,15 +1,8 @@
-var register = {
-  templateUrl: './register.html',
-  controller: 'RegisterController'
+import controller from './register.controller';
+
+const RegisterComponent = {
+  controller,
+  templateUrl: 'app/components/auth/register/register.html'
 };
 
-angular
-  .module('components.auth')
-  .component('register', register)
-  .config(function ($stateProvider) {
-    $stateProvider
-      .state('auth.register', {
-        url: '/register',
-        component: 'register'
-      });
-  });
+export default RegisterComponent;

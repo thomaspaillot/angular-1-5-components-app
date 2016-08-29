@@ -1,23 +1,27 @@
-function ContactEditController($state, ContactService, cfpLoadingBar, $window) {
-  var ctrl = this;
-  ctrl.updateContact = function (event) {
-    cfpLoadingBar.start();
-    return ContactService
+class ContactEditController {
+  /*@ngInject*/
+  constructor($state, ContactService, cfpLoadingBar, $window) {
+    this.$state = $state;
+    this.contactService = ContactService;
+    this.cfpLoadingBar = cfpLoadingBar;
+    this.$window = $window;
+  }
+
+  updateContact(event) {
+    this.cfpLoadingBar.start();
+    return this.contactService
       .updateContact(event.contact)
-      .then(cfpLoadingBar.complete, cfpLoadingBar.complete);
-  };
-  ctrl.deleteContact = function (event) {
+      .then(() => this.cfpLoadingBar.complete());
+  }
+
+  deleteContact(event) {
     var message = 'Delete ' + event.contact.name + ' from contacts?';
-    if ($window.confirm(message)) {
-      return ContactService
+    if (this.$window.confirm(message)) {
+      return this.contactService
         .deleteContact(event.contact)
-        .then(function () {
-          $state.go('contacts');
-        });
+        .then(() => this.$state.go('contacts'));
     }
-  };
+  }
 }
 
-angular
-  .module('components.contact')
-  .controller('ContactEditController', ContactEditController);
+export default ContactEditController;

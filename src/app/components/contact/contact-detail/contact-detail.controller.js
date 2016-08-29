@@ -1,35 +1,36 @@
-function ContactDetailController() {
-  var ctrl = this;
-  ctrl.$onInit = function () {
-    ctrl.isNewContact = !ctrl.contact.$id;
-  };
-  ctrl.saveContact = function () {
-    ctrl.onSave({
+class ContactDetailController {
+  $onInit() {
+    this.isNewContact = !this.contact.$id;
+  }
+
+  saveContact() {
+    this.onSave({
       $event: {
-        contact: ctrl.contact
+        contact: this.contact
       }
     });
-  };
-  ctrl.updateContact = function () {
-    ctrl.onUpdate({
+  }
+
+  updateContact() {
+    this.onUpdate({
       $event: {
-        contact: ctrl.contact
+        contact: this.contact
       }
     });
-  };
-  ctrl.deleteContact = function () {
-    ctrl.onDelete({
+  }
+
+  deleteContact() {
+    this.onDelete({
       $event: {
-        contact: ctrl.contact
+        contact: this.contact
       }
     });
-  };
-  ctrl.tagChange = function (event) {
-    ctrl.contact.tag = event.tag;
-    ctrl.updateContact();
+  }
+
+  tagChange(event) {
+    this.contact.tag = event.tag;
+    this.updateContact();
   }
 }
 
-angular
-  .module('components.contact')
-  .controller('ContactDetailController', ContactDetailController);
+export default ContactDetailController;

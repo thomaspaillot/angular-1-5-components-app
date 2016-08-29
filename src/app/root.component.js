@@ -1,7 +1,7 @@
-var root = {
-  templateUrl: './root.html'
+import '../sass/style.scss';
+
+var RootComponent = {
+  templateUrl: 'app/root.html'
 };
 
-angular
-  .module('root')
-  .component('root', root);
+export default RootComponent;

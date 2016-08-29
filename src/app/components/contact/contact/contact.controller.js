@@ -1,14 +1,12 @@
-function ContactController() {
-  var ctrl = this;
-  ctrl.selectContact = function () {
-    ctrl.onSelect({
+
+class ContactController {
+  selectContact() {
+    this.onSelect({
       $event: {
-        contactId: ctrl.contact.$id
+        contactId: this.contact.$id
       }
     });
-  };
+  }
 }
 
-angular
-  .module('components.contact')
-  .controller('ContactController', ContactController);
+export default ContactController;

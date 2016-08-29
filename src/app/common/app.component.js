@@ -1,19 +1,8 @@
-var app = {
-  templateUrl: './app.html',
-  controller: 'AppController'
+import controller from './app.controller';
+
+const AppComponent = {
+  controller,
+  templateUrl: 'app/common/app.html'
 };
 
-angular
-  .module('common')
-  .component('app', app)
-  .config(function ($stateProvider) {
-    $stateProvider
-      .state('app', {
-        redirectTo: 'contacts',
-        url: '/app',
-        data: {
-          requiredAuth: true
-        },
-        component: 'app'
-      })
-  });
+export default AppComponent;

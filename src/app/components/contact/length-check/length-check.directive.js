@@ -1,4 +1,4 @@
-function lengthCheck() {
+const lengthCheck = () => {
   return {
     restrict: 'A',
     require: 'ngModel',
@@ -18,8 +18,6 @@ function lengthCheck() {
       };
     }
   };
-}
+};
 
-angular
-  .module('components.contact')
-  .directive('lengthCheck', lengthCheck);
+export default lengthCheck;

@@ -1,23 +1,24 @@
-function LoginController(AuthService, $state) {
-  var ctrl = this;
-  ctrl.$onInit = function () {
-    ctrl.error = null;
-    ctrl.user = {
+class LoginController {
+  /*@ngInject*/
+  constructor(AuthService, $state) {
+    this.authService = AuthService;
+    this.$state = $state;
+  }
+
+  $onInit() {
+    this.error = null;
+    this.user = {
       email: '',
       password: ''
     };
-  };
-  ctrl.loginUser = function (event) {
-    return AuthService
+  }
+
+  loginUser(event) {
+    return this.authService
       .login(event.user)
-      .then(function () {
-        $state.go('app');
-      }, function (reason) {
-        ctrl.error = reason.message;
-      });
-  };
+      .then(() => this.$state.go('app'))
+      .catch(reason => this.error = reason.message);
+  }
 }
 
-angular
-  .module('components.auth')
-  .controller('LoginController', LoginController);
+export default LoginController;

@@ -1,25 +1,33 @@
-function ContactService(AuthService, $firebaseRef, $firebaseArray, $firebaseObject) {
-  var ref = $firebaseRef.contacts;
-  var uid = AuthService.getUser().uid;
-  return {
-    createNewContact: function (contact) {
-      return $firebaseArray(ref.child(uid)).$add(contact);
-    },
-    getContactById: function (id) {
-      return $firebaseObject(ref.child(uid).child(id));
-    },
-    getContactList: function () {
-      return $firebaseArray(ref.child(uid));
-    },
-    updateContact: function (contact) {
-      return contact.$save();
-    },
-    deleteContact: function (contact) {
-      return contact.$remove();
-    }
-  };
+class ContactService {
+  /*@ngInject*/
+  constructor(AuthService, $firebaseRef, $firebaseArray, $firebaseObject) {
+    this.authService = AuthService;
+    this.$firebaseRef = $firebaseRef;
+    this.$firebaseArray = $firebaseArray;
+    this.$firebaseObject = $firebaseObject;
+    this.ref = $firebaseRef.contacts;
+    this.uid = AuthService.getUser().uid;
+  }
+
+  createNewContact(contact) {
+    return this.$firebaseArray(this.ref.child(this.uid)).$add(contact);
+  }
+
+  getContactById(id) {
+    return this.$firebaseObject(this.ref.child(this.uid).child(id));
+  }
+
+  getContactList() {
+    return this.$firebaseArray(this.ref.child(this.uid));
+  }
+
+  updateContact(contact) {
+    return contact.$save();
+  }
+
+  deleteContact(contact) {
+    return contact.$remove();
+  }
 }
 
-angular
-  .module('components.contact')
-  .factory('ContactService', ContactService);
+export default ContactService;

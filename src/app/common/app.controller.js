@@ -1,13 +1,14 @@
-function AppController(AuthService, $state) {
-  var ctrl = this;
-  ctrl.user = AuthService.getUser();
-  ctrl.logout = function () {
-    AuthService.logout().then(function () {
-      $state.go('auth.login');
-    });
-  };
+class AppController {
+  /*@ngInject*/
+  constructor(AuthService, $state) {
+    this.authService = AuthService;
+    this.$state = $state;
+    this.user = this.authService.getUser();
+  }
+
+  logout() {
+    this.authService.logout().then(() => this.$state.go('auth.login'));
+  }
 }
 
-angular
-  .module('common')
-  .controller('AppController', AppController);
+export default AppController;

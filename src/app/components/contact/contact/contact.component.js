@@ -1,12 +1,12 @@
-var contact = {
+import controller from './contact.controller';
+
+const ContactComponent = {
   bindings: {
     contact: '<',
     onSelect: '&'
   },
-  templateUrl: './contact.html',
-  controller: 'ContactController'
+  controller,
+  templateUrl: 'app/components/contact/contact/contact.html'
 };
 
-angular
-  .module('components.contact')
-  .component('contact', contact);
+export default ContactComponent;

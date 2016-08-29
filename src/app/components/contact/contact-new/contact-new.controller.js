@@ -1,7 +1,12 @@
-function ContactNewController(ContactService, $state) {
-  var ctrl = this;
-  ctrl.$onInit = function () {
-    ctrl.contact = {
+class ContactNewController {
+  /*@ngInject*/
+  constructor(ContactService, $state) {
+    this.contactService = ContactService;
+    this.$state = $state;
+  }
+
+  $onInit() {
+    this.contact = {
       name: '',
       email: '',
       job: '',
@@ -14,18 +19,13 @@ function ContactNewController(ContactService, $state) {
       },
       tag: 'none'
     };
-  };
-  ctrl.createNewContact = function (event) {
-    return ContactService
+  }
+
+  createNewContact(event) {
+    return this.contactService
       .createNewContact(event.contact)
-      .then(function (contact) {
-        $state.go('contact', {
-          id: contact.key
-        });
-      });
-  };
+      .then(contact => this.$state.go('contact', {id: contact.key}));
+  }
 }
 
-angular
-  .module('components.contact')
-  .controller('ContactNewController', ContactNewController);
+export default ContactNewController;

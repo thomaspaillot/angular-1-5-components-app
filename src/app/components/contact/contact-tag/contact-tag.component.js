@@ -1,12 +1,12 @@
-var contactTag = {
+import controller from './contact-tag.controller';
+
+const ContactTagComponent = {
   bindings: {
     tag: '<',
     onChange: '&'
   },
-  templateUrl: './contact-tag.html',
-  controller: 'ContactTagController'
+  controller,
+  templateUrl: 'app/components/contact/contact-tag/contact-tag.html'
 };
 
-angular
-  .module('components.contact')
-  .component('contactTag', contactTag);
+export default ContactTagComponent;

@@ -1,16 +1,21 @@
-function ContactsController($filter, $state) {
-  var ctrl = this;
-  var contacts = ctrl.contacts;
+class ContactsController {
+  /*@ngInject*/
+  constructor($filter, $state) {
+    this.$filter = $filter;
+    this.$state = $state;
+  }
 
-  ctrl.filteredContacts = $filter('contactsFilter')(contacts, ctrl.filter);
+  $onChanges(changes) {
+    if(changes.contacts) {
+      this.filteredContacts = this.$filter('contactsFilter')(changes.contacts.currentValue, changes.filter.currentValue);
+    }
+  }
 
-  ctrl.goToContact = function (event) {
-    $state.go('contact', {
+  goToContact(event) {
+    this.$state.go('contact', {
       id: event.contactId
     });
-  };
+  }
 }
 
-angular
-  .module('components.contact')
-  .controller('ContactsController', ContactsController);
+export default ContactsController;

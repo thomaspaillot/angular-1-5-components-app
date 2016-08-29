@@ -1,14 +1,14 @@
-var contactDetail = {
+import controller from './contact-detail.controller';
+
+const ContactDetailComponent = {
   bindings: {
     contact: '<',
     onSave: '&',
     onUpdate: '&',
     onDelete: '&'
   },
-  templateUrl: './contact-detail.html',
-  controller: 'ContactDetailController'
+  controller,
+  templateUrl: 'app/components/contact/contact-detail/contact-detail.html'
 };
 
-angular
-  .module('components.contact')
-  .component('contactDetail', contactDetail);
+export default ContactDetailComponent;

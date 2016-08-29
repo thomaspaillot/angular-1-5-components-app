@@ -1,16 +1,8 @@
-var contactNew = {
-  templateUrl: './contact-new.html',
-  controller: 'ContactNewController'
+import controller from './contact-new.controller';
+
+const ContactNewComponent = {
+  controller,
+  templateUrl: 'app/components/contact/contact-new/contact-new.html'
 };
 
-angular
-  .module('components.contact')
-  .component('contactNew', contactNew)
-  .config(function ($stateProvider) {
-    $stateProvider
-      .state('new', {
-        parent: 'app',
-        url: '/new',
-        component: 'contactNew'
-      });
-  });
+export default ContactNewComponent;
